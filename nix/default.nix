@@ -1,16 +1,21 @@
-{ pkgs, stdenv, target }:
-
+{ stdenv
+, fetchFromGitHub
+, sh3eb-elf-binutils
+, sh3eb-elf-gcc
+, mkg3a
+, libfxcg
+}:
 stdenv.mkDerivation {
 	pname = "prizmsdk";
 	version = "0.0.0";
 
 	src = ./..;
 
-	FXCGSDK = pkgs.libfxcg;
+	FXCGSDK = libfxcg;
 
-	nativeBuildInputs = with pkgs; [
-		"${target}-binutils"
-		"${target}-gcc"
+	nativeBuildInputs = [
+		sh3eb-elf-binutils
+		sh3eb-elf-gcc
 		mkg3a libfxcg
 	];
 

@@ -1,0 +1,5 @@
+Compile:
+  Add:
+    - -nostdlib
+    - -include-directory=include
+  Compiler: sh3eb-elf-gcc

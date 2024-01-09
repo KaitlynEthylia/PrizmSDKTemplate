@@ -1,11 +1,11 @@
-{ stdenv , fetchTarball , target }:
+{ stdenv, target }:
 let
 	version = "2.36.1";
 in stdenv.mkDerivation {
 	pname = "${target}-binutils";
 	inherit version;
 
-	src = fetchTarball {
+	src = builtins.fetchTarball {
 		url = "https://ftp.gnu.org/gnu/binutils/binutils-${version}.tar.bz2";
 		sha256 = "0hdyh6lmhdxkw856h6h970wbd77985asfjc2cvdw80ykh89kzklc";
 	};

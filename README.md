@@ -1,0 +1,5 @@
+# PrizmSDKTemplate
+
+```sh
+nix build
+```

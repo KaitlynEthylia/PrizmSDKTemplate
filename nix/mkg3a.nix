@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitLab }:
+{ stdenv, fetchFromGitLab, cmake, libpng }:
 let
 	version = "0.5.0";
 in stdenv.mkDerivation {
@@ -12,6 +12,6 @@ in stdenv.mkDerivation {
 		sha256 = "sha256-15GW9qKifEkmly/CViMzrl9mWw6lZPO4ZeADgm3tA+w=";
 	};
 
-	nativeBuildInputs = [ pkgs.cmake ];
-	buildInputs = [ pkgs.libpng ];
+	nativeBuildInputs = [ cmake ];
+	buildInputs = [ libpng ];
 }

@@ -1,16 +1,23 @@
-{ pkgs, stdenv, fetchTarball, target }:
+{ stdenv
+, target
+, sh3eb-elf-binutils
+, libmpc
+, gmp
+, mpfr
+, zlib
+}:
 let
 	version = "12.2.0";
 in stdenv.mkDerivation {
 	pname = "${target}-gcc";
 	inherit version;
 
-	src = fetchTarball {
+	src = builtins.fetchTarball {
 		url = "https://gcc.gnu.org/pub/gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
 		sha256 = "sha256:1lpzbx0hvxwm7565af1brwbl8kg7pq6vzny7lrg7gdgimvnhal5v";
 	};
 
-	buildInputs = with pkgs; [ binutils libmpc gmp mpfr zlib ];
+	buildInputs = [ sh3eb-elf-binutils libmpc gmp mpfr zlib ];
 
 	inherit target;
 	configurePhase = ''
@@ -26,8 +33,8 @@ in stdenv.mkDerivation {
 			--enable-multilib --enable-lto \
 			--enable-languages=c,c++ \
 			--program-prefix=$target- \
-			--with-as=${pkgs.binutils}/bin/${target}-as \
-			--with-ld=${pkgs.binutils}/bin/${target}-ld \
+			--with-as=${sh3eb-elf-binutils}/bin/${target}-as \
+			--with-ld=${sh3eb-elf-binutils}/bin/${target}-ld \
 	'';
 
 	hardeningDisable = [ "all" ];

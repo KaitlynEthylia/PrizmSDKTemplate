@@ -1,19 +1,18 @@
 #include <fxcg/display.h>
 #include <fxcg/keyboard.h>
- 
+
+// First two bytes of print string are used to determine charest
+// Padding with spaces uses the default charest
+#define CHARSET "  "
+
 int main(void) {
-    int key;
-     
-    Bdisp_AllClr_VRAM();
-    Print_OS("Hello, Gays!", 0, 0);
+  // X and Y indexed from 1
+  PrintXY(4, 4, CHARSET "Hello, World!", TEXT_MODE_NORMAL, TEXT_COLOR_BLACK);
 
-    while (1) {
-        GetKey(&key);
-
-        if (key == KEY_CTRL_EXE) {
-            break;
-        }
-    }
- 
-    return 1;
+  int key;
+  while (1) {
+    GetKey(&key);
+    if (key == KEY_CTRL_EXE)
+      break;
+  }
 }

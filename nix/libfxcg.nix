@@ -1,4 +1,9 @@
-{ pkgs, stdenv, fetchFromGitHub, target }:
+{ stdenv
+, fetchFromGitHub
+, sh3eb-elf-binutils
+, sh3eb-elf-gcc
+, mkg3a
+}:
 let
 	version = "0.5.2";
 in stdenv.mkDerivation {
@@ -12,9 +17,9 @@ in stdenv.mkDerivation {
 		sha256 = "sha256-ndDGEbJIjf3rLVCvspFohwe9qoTLoPGltUIpiOjz1E8=";
 	};
 
-	nativeBuildInputs = with pkgs; [
-		"${target}-binutils"
-		"${target}-gcc"
+	nativeBuildInputs = [
+		sh3eb-elf-binutils
+		sh3eb-elf-gcc
 		mkg3a
 	];
 

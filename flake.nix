@@ -5,26 +5,28 @@
 
 	outputs = { nixpkgs, utils, ... }: utils.lib.eachDefaultSystem (system:
 		let
+			pkgs = import nixpkgs { inherit system; };
 			target = "sh3eb-elf";
-			sh3-overlay = final: prev: {
-				"mkg3a" = final.callPackage ./nix/mkg3a.nix { };
-				"${target}-binutils" = final.callPackage ./nix/binutils.nix { inherit target; };
-				"${target}-gcc" = final.callPackage ./nix/gcc.nix { inherit target; };
-				"libfxcg" = final.callPackage ./nix/libfxcg.nix { inherit target; };
+			callPackage = pkgs.lib.callPackageWith (pkgs // sh3-pkgs);
+			sh3-pkgs = {
+				mkg3a = callPackage ./nix/mkg3a.nix { };
+				"${target}-binutils" = callPackage ./nix/binutils.nix { inherit target; };
+				"${target}-gcc" = callPackage ./nix/gcc.nix { inherit target; };
+				libfxcg = callPackage ./nix/libfxcg.nix { };
 			};
-			pkgs = import nixpkgs { inherit system; overlays = [ sh3-overlay ]; };
 		in rec {
 			packages = {
-				prizmsdk = pkgs.callPackage ./nix { inherit target; };
+				prizmsdk = callPackage ./nix { };
 				default = packages.prizmsdk;
 			};
 			devShells = {
-				default = pkgs.mkShell {
-					packages = with pkgs; [
+				default = packages.prizmsdk.overrideAttrs (self: prev: {
+					CPATH = "${sh3-pkgs.libfxcg}/include";
+
+					nativeBuildInputs = with pkgs; [
 						clang-tools_17
-					];
-				};
-				prizmsdk = packages.prizmsdk;
+					] ++ prev.nativeBuildInputs;
+				});
 			};
 		});
 }
